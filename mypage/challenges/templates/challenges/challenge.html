@@ -1,0 +1,20 @@
+{% extends 'base.html' %}
+
+    {% block title_page %}
+        {{month_name|title}} challenges
+    {% endblock title_page %}
+    
+
+{% block content %}
+
+    {% include "challenges/includes/header.html" %}
+    <h1> let see if it works </h1>
+    <h1>This is a {{month_name|title}} challenge site.</h1>
+    {% if text is not None  %}
+        <h2>{{ text }}</h2>  <! --it takes all the key from the dic made in the function monthly_challenge in views and gives out its value--> 
+    {% else %}
+        <p> There is no challenge for this month </p>
+    {% endif %}
+
+{% endblock content %}
+

@@ -1,6 +1,8 @@
 from django.shortcuts import render
 from django.http import HttpResponse, HttpResponseNotFound,HttpResponseRedirect
 from django.urls import reverse
+from django.template.loader import render_to_string
+
 
 # Create your views here. # this is an App / Module
 
@@ -30,14 +32,16 @@ monthly_challenge_dic = {
 def index(request):
     list_items= ""
     months = list(monthly_challenge_dic.keys())
+    return render(request, "challenges/index.html",{
+        "months": months
+    } )
+    # for month in months:
+    #     capitalize_month = month.capitalize()
+    #     month_path = reverse("month-challenge", args=[month])
+    #     list_items += f"<li><a href= \"{month_path}\">{capitalize_month}</a><li>"
 
-    for month in months:
-        capitalize_month = month.capitalize()
-        month_path = reverse("month-challenge", args=[month])
-        list_items += f"<li><a href= \"{month_path}\">{capitalize_month}</a><li>"
-
-    response_data = f"<ul>{list_items}</ul>"
-    return HttpResponse (response_data)
+    # response_data = f"<ul>{list_items}</ul>"
+    # return HttpResponse (response_data)
 
 
 
@@ -56,10 +60,15 @@ def monthly_challenge_number(request, month):
 
 
 def monthly_challenge(request,month):
+    
     try:
-        response_text = monthly_challenge_dic[month]
-        response_datat = f"<h1>{response_text}<h1>"
+        response_text = monthly_challenge_dic[month] # gives the value of the specified given month
+        return render(request,"challenges/challenge.html",{
+            "text": response_text,
+            "month_name": month
+        })
     except:
-        return HttpResponseNotFound("<h1>This month is not valid !<h1>")
+        response_data = render_to_string("404.html")
+        return HttpResponseNotFound(response_data)
 
-    return HttpResponse(response_datat)
+    
